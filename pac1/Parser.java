@@ -15,8 +15,16 @@ import java.util.regex.Pattern;
 
 public class Parser 
 {
+	
+	private String file;
+	private Map<String, String> constantsMap = new HashMap<>();
+	
+	public Parser(String file)
+	{
+		this.file = file;
+	}
 
-	public void parse(String file) throws IOException
+	public void parse() throws IOException
 	{
 		String s = "";
 		String line = "";
@@ -29,11 +37,14 @@ public class Parser
 		bufReader.close();
 		
 		
+		loadConstants(s);
+		
+		
 		String publicationPattern = "@(?![Pp]reamle|[Ss]tring|[Cc]oment)(\\w\\S*)"
-				+ "\\s*\\{([a-zA-Z]\\S*)\\s*,\\s*"
+				+ "\\s*[\\{\\(]([a-zA-Z]\\S*)\\s*,\\s*"
 				+ "((\\w\\S*\\s*=\\s*.*?\\s*,\\s*)*"
 				+ "\\w\\S*\\s*=\\s*.*(?<!,)\\s*)[,]?\\s*"
-				+ "\\}"
+				+ "[\\}\\)]"
 				;
 		String argumentPattern = "\\s*(\\w\\S*)\\s*=\\s*(.+)\\s*";
 		
@@ -69,7 +80,6 @@ public class Parser
 			}	
 		}
 		
-		System.out.println(evaluateValue("{\\'{E}}do\" uard\" Masterly"));
 		
 	}
 	
@@ -79,18 +89,18 @@ public class Parser
 		Pattern regularValue = Pattern.compile("([^\"\\{].*?[^\"\\}])");
 		Pattern quotedValue = Pattern.compile("\"(.*?)\"");
 		Pattern bracedValue = Pattern.compile("\\{([^\\{\\}]*?)\\}");
-		
+		 
 		String currentValue = value;
-		
+		 
 		
 		
 		Matcher matcher = bracedValue.matcher(value);
 		while(matcher.find())
 		{
-			System.out.println(currentValue);
+//			System.out.println(currentValue);
 			currentValue = matcher.replaceFirst(matcher.group(1));
 			matcher = bracedValue.matcher(currentValue);
-			System.out.println(currentValue);
+//			System.out.println(currentValue);
 		}
 		
 		matcher = regularValue.matcher(currentValue);
@@ -99,7 +109,9 @@ public class Parser
 			return matcher.group(1);
 		}
 		
+//		System.out.println(currentValue);
 		matcher = quotedValue.matcher(currentValue);
+//		System.out.println(matcher.matches());
 		if (matcher.matches())
 		{
 			return matcher.group(1);
@@ -107,6 +119,19 @@ public class Parser
 		
 		return "";
 	}
+	
+	private void loadConstants(String fileTextString)
+	{
+		Pattern stringConstant =  Pattern.compile("@[Ss][Tt][Rr][Ii][Nn][Gg]\\s*?[\\{\\(]\\s*?([a-zA-Z]\\w*?)\\s*?=\\s*?(.*)?\\s*?[\\}\\)]");
+		Matcher matcher = stringConstant.matcher(fileTextString);
+		while (matcher.find())
+		{
+			constantsMap.put(matcher.group(1).toLowerCase(), evaluateValue(matcher.group(2)));
+		} 
+		System.out.println(constantsMap); 
+	}
+	
+	
 	
 }
 
