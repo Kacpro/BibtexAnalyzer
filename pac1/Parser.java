@@ -86,6 +86,21 @@ public class Parser
 	private String evaluateValue(String value)
 	{
 		
+		if (constantsMap.containsKey(value))
+		{
+			return constantsMap.get(value);
+		}
+		
+		System.out.println(value);
+		Pattern concatValue = Pattern.compile("[\"]?(.+?)[\"]?\\s*#\\s*[\"]?([^\"]+)[\"]?\\s*");
+		Matcher matcher = concatValue.matcher(value);
+		if (matcher.find())
+		{
+			System.out.println(matcher.group(1)+ "  " + matcher.group(2));
+			return evaluateValue(matcher.group(1)) + evaluateValue(matcher.group(2));
+		}
+		
+		
 		Pattern regularValue = Pattern.compile("([^\"\\{].*?[^\"\\}])");
 		Pattern quotedValue = Pattern.compile("\"(.*?)\"");
 		Pattern bracedValue = Pattern.compile("\\{([^\\{\\}]*?)\\}");
@@ -94,7 +109,7 @@ public class Parser
 		 
 		
 		
-		Matcher matcher = bracedValue.matcher(value);
+		matcher = bracedValue.matcher(value);
 		while(matcher.find())
 		{
 //			System.out.println(currentValue);
@@ -115,20 +130,18 @@ public class Parser
 		if (matcher.matches())
 		{
 			return matcher.group(1);
-		}
-		
+		}	
 		return "";
 	}
 	
 	private void loadConstants(String fileTextString)
 	{
-		Pattern stringConstant =  Pattern.compile("@[Ss][Tt][Rr][Ii][Nn][Gg]\\s*?[\\{\\(]\\s*?([a-zA-Z]\\w*?)\\s*?=\\s*?(.*)?\\s*?[\\}\\)]");
+		Pattern stringConstant =  Pattern.compile("@[Ss][Tt][Rr][Ii][Nn][Gg]\\s*?[\\{\\(]\\s*?([a-zA-Z]\\w*?)\\s*=\\s*(.*)?\\s*?[\\}\\)]");
 		Matcher matcher = stringConstant.matcher(fileTextString);
 		while (matcher.find())
 		{
 			constantsMap.put(matcher.group(1).toLowerCase(), evaluateValue(matcher.group(2)));
 		} 
-		System.out.println(constantsMap); 
 	}
 	
 	
