@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.CharBuffer;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,10 +26,11 @@ public class Parser
 		while ((line = bufReader.readLine()) != null)
 			s+= line + "\n";
 		
+		bufReader.close();
 		
 		
 		String publicationPattern = "@(?![Pp]reamle|[Ss]tring|[Cc]oment)(\\w\\S*)"
-				+ "[\\s]*\\{([a-zA-Z]\\S*)\\s*,\\s*"
+				+ "\\s*\\{([a-zA-Z]\\S*)\\s*,\\s*"
 				+ "((\\w\\S*\\s*=\\s*.*?\\s*,\\s*)*"
 				+ "\\w\\S*\\s*=\\s*.*(?<!,)\\s*)[,]?\\s*"
 				+ "\\}"
@@ -50,23 +52,63 @@ public class Parser
 			for (String argument : arguments)
 			{
 				Matcher m2 = p2.matcher(argument);
-				m2.matches();																		// ewaluacja wartoœci
+				m2.matches();
 				argumentMap.put(m2.group(1), m2.group(2));
+				
+				
+				if (Arrays.asList(Categories.getRequiredArguments(category)).contains(m2.group(1)) || Arrays.asList(Categories.getOptionalArguments(category)).contains(m2.group(1)))
+				{
+					evaluateValue(m2.group(2));
+				}
+				
+				
 			}
 			if (Categories.checkCategory(m.group(1), argumentMap.keySet()))
 			{
 				 
-			}
-			
+			}	
 		}
 		
-		
-		
-		
-		
-		
-		
+		System.out.println(evaluateValue("{\\'{E}}do\" uard\" Masterly"));
 		
 	}
 	
+	private String evaluateValue(String value)
+	{
+		
+		Pattern regularValue = Pattern.compile("([^\"\\{].*?[^\"\\}])");
+		Pattern quotedValue = Pattern.compile("\"(.*?)\"");
+		Pattern bracedValue = Pattern.compile("\\{([^\\{\\}]*?)\\}");
+		
+		String currentValue = value;
+		
+		
+		
+		Matcher matcher = bracedValue.matcher(value);
+		while(matcher.find())
+		{
+			System.out.println(currentValue);
+			currentValue = matcher.replaceFirst(matcher.group(1));
+			matcher = bracedValue.matcher(currentValue);
+			System.out.println(currentValue);
+		}
+		
+		matcher = regularValue.matcher(currentValue);
+		if (matcher.matches())
+		{
+			return matcher.group(1);
+		}
+		
+		matcher = quotedValue.matcher(currentValue);
+		if (matcher.matches())
+		{
+			return matcher.group(1);
+		}
+		
+		return "";
+	}
+	
 }
+
+
+
