@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.nio.CharBuffer;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -18,13 +19,14 @@ public class Parser
 	
 	private String file;
 	private Map<String, String> constantsMap = new HashMap<>();
+	private List<Publication> publicationList = new LinkedList<>();
 	
 	public Parser(String file)
 	{
 		this.file = file;
 	}
 
-	public void parse() throws IOException
+	public List<Publication> parse() throws IOException
 	{
 		String s = "";
 		String line = "";
@@ -54,7 +56,6 @@ public class Parser
 		Pattern p2 = Pattern.compile(argumentPattern);
 		while(m.find())
 		{
-//			System.out.println(m.group(3));
 			String category = m.group(1);
 			String key = m.group(2);
 			String[] arguments = m.group(3).split(",");
@@ -63,24 +64,18 @@ public class Parser
 			for (String argument : arguments)
 			{
 				Matcher m2 = p2.matcher(argument);
-				m2.matches();
-				argumentMap.put(m2.group(1), m2.group(2));
-				
-				
+				m2.matches();	
 				if (Arrays.asList(Categories.getRequiredArguments(category)).contains(m2.group(1)) || Arrays.asList(Categories.getOptionalArguments(category)).contains(m2.group(1)))
 				{
-					evaluateValue(m2.group(2));
-				}
-				
-				
+					argumentMap.put(m2.group(1), evaluateValue(m2.group(2)));
+				}		
 			}
 			if (Categories.checkCategory(m.group(1), argumentMap.keySet()))
 			{
-				 
+				 publicationList.add(new Publication(category, key, argumentMap));
 			}	
 		}
-		
-		
+		return publicationList;
 	}
 	
 	private String evaluateValue(String value)
@@ -142,10 +137,7 @@ public class Parser
 		{
 			constantsMap.put(matcher.group(1).toLowerCase(), evaluateValue(matcher.group(2)));
 		} 
-	}
-	
-	
-	
+	}	
 }
 
 

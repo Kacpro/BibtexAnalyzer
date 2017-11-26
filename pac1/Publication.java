@@ -2,6 +2,7 @@ package pac1;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 public class Publication 
 {
@@ -48,11 +49,15 @@ public class Publication
 		return "";
 	}
 	
-	public Publication(String category, String key, List<Tuple<String, String>> arguments)
+	public Publication(String category, String key, Map<String, String> arguments)
 	{
 		this.category = category;
 		this.key = key;
-		this.arguments = arguments;
+
+		for (String argumentName : arguments.keySet())
+		{
+			this.arguments.add(new Tuple<String, String>(argumentName, arguments.get(argumentName)));
+		}
 	}
 	
 	
