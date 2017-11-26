@@ -7,8 +7,8 @@ import java.util.Map;
 public class Publication 
 {
 	private String category = null;
-	private List<Tuple<String, String>> arguments= new LinkedList<>(); 
-	String key = null;
+	public List<Tuple<String, String>> arguments= new LinkedList<>();  //public do testów
+	private String key = null;
 	
 	
 	

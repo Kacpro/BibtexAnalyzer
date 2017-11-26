@@ -5,6 +5,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.InputMismatchException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -28,7 +29,7 @@ public class Parser
 
 	
 	
-	public List<Publication> parse() throws IOException
+	public List<Publication> parse() throws IOException, InputMismatchException
 	{
 		String fileTextString = fileReader(file);
 		
@@ -66,7 +67,11 @@ public class Parser
 			if (Categories.checkCategory(m.group(1), argumentMap.keySet()))
 			{
 				 publicationList.add(new Publication(category, key, argumentMap));
-			}	
+			}
+			else
+			{
+				throw new InputMismatchException();
+			}
 		}
 		return publicationList;
 	}
@@ -75,9 +80,9 @@ public class Parser
 	
 	private String evaluateValue(String value)
 	{
-		if (constantsMap.containsKey(value))
+		if (constantsMap.containsKey(value.toLowerCase()))
 		{
-			return constantsMap.get(value);
+			return constantsMap.get(value.toLowerCase());
 		}
 		
 		String result;
@@ -99,13 +104,12 @@ public class Parser
 	
 	private String evaluateSingleValue(String value)
 	{
-		Pattern regularValue = Pattern.compile("([^\"\\{].*?[^\"\\}])");
+		Pattern regularValue = Pattern.compile("^(?!\"|\\{)(.*?)(?<!\"\\})$");  
 		Pattern quotedValue = Pattern.compile("\"(.*?)\"");
 		Pattern bracedValue = Pattern.compile("\\{([^\\{\\}]*?)\\}");
 		 
 		String currentValue = value;
 		 
-		
 		Matcher matcher = bracedValue.matcher(value);
 		while(matcher.find())
 		{
@@ -135,7 +139,6 @@ public class Parser
 		Matcher matcher = concatValue.matcher(value);
 		if (matcher.find())
 		{
-			System.out.println(matcher.group(1)+ "  " + matcher.group(2));
 			return evaluateValue(matcher.group(1)) + evaluateValue(matcher.group(2));
 		}
 		return null;
