@@ -10,15 +10,21 @@ public class Publication
 	private List<Tuple<String, String>> arguments= new LinkedList<>(); 
 	String key = null;
 	
+	
+	
 	public String getCategory()
 	{
 		return category;
 	}
 	
+	
+	
 	public String getKey()
 	{
 		return key;
 	}
+	
+	
 	
 	public boolean containsArgument(String argument)
 	{
@@ -32,6 +38,8 @@ public class Publication
 		return false;
 	}
 	
+	
+	
 	public String getArgumentValue(String argument)
 	{
 		for (Tuple<String, String> tuple : arguments)
@@ -44,10 +52,7 @@ public class Publication
 		return null;
 	}
 	
-	public String toString()
-	{
-		return "";
-	}
+	
 	
 	public Publication(String category, String key, Map<String, String> arguments)
 	{

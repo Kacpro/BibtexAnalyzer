@@ -1,10 +1,8 @@
 package pac1;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.nio.CharBuffer;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -21,25 +19,20 @@ public class Parser
 	private Map<String, String> constantsMap = new HashMap<>();
 	private List<Publication> publicationList = new LinkedList<>();
 	
+	
+	
 	public Parser(String file)
 	{
 		this.file = file;
 	}
 
+	
+	
 	public List<Publication> parse() throws IOException
 	{
-		String s = "";
-		String line = "";
+		String fileTextString = fileReader(file);
 		
-		FileReader reader = new FileReader(file);
-		BufferedReader bufReader = new BufferedReader(reader);
-		while ((line = bufReader.readLine()) != null)
-			s+= line + "\n";
-		
-		bufReader.close();
-		
-		
-		loadConstants(s);
+		loadConstants(fileTextString);
 		
 		
 		String publicationPattern = "@(?![Pp]reamle|[Ss]tring|[Cc]oment)(\\w\\S*)"
@@ -51,7 +44,7 @@ public class Parser
 		String argumentPattern = "\\s*(\\w\\S*)\\s*=\\s*(.+)\\s*";
 		
 		Pattern p = Pattern.compile(publicationPattern);
-		Matcher m = p.matcher(s);
+		Matcher m = p.matcher(fileTextString);
 		
 		Pattern p2 = Pattern.compile(argumentPattern);
 		while(m.find())
@@ -78,24 +71,34 @@ public class Parser
 		return publicationList;
 	}
 	
+	
+	
 	private String evaluateValue(String value)
 	{
-		
 		if (constantsMap.containsKey(value))
 		{
 			return constantsMap.get(value);
 		}
 		
-		System.out.println(value);
-		Pattern concatValue = Pattern.compile("[\"]?(.+?)[\"]?\\s*#\\s*[\"]?([^\"]+)[\"]?\\s*");
-		Matcher matcher = concatValue.matcher(value);
-		if (matcher.find())
+		String result;
+		
+		if ((result = evaluateConcatenatedValue(value)) != null)
 		{
-			System.out.println(matcher.group(1)+ "  " + matcher.group(2));
-			return evaluateValue(matcher.group(1)) + evaluateValue(matcher.group(2));
+			return result;
 		}
 		
+		if ((result = evaluateSingleValue(value)) != null)
+		{
+			return result;
+		}
 		
+		return null;
+	}
+	
+	
+	
+	private String evaluateSingleValue(String value)
+	{
 		Pattern regularValue = Pattern.compile("([^\"\\{].*?[^\"\\}])");
 		Pattern quotedValue = Pattern.compile("\"(.*?)\"");
 		Pattern bracedValue = Pattern.compile("\\{([^\\{\\}]*?)\\}");
@@ -103,14 +106,11 @@ public class Parser
 		String currentValue = value;
 		 
 		
-		
-		matcher = bracedValue.matcher(value);
+		Matcher matcher = bracedValue.matcher(value);
 		while(matcher.find())
 		{
-//			System.out.println(currentValue);
 			currentValue = matcher.replaceFirst(matcher.group(1));
 			matcher = bracedValue.matcher(currentValue);
-//			System.out.println(currentValue);
 		}
 		
 		matcher = regularValue.matcher(currentValue);
@@ -119,15 +119,45 @@ public class Parser
 			return matcher.group(1);
 		}
 		
-//		System.out.println(currentValue);
 		matcher = quotedValue.matcher(currentValue);
-//		System.out.println(matcher.matches());
 		if (matcher.matches())
 		{
 			return matcher.group(1);
-		}	
-		return "";
+		}
+		return null;
 	}
+	
+	
+	
+	private String evaluateConcatenatedValue(String value)
+	{
+		Pattern concatValue = Pattern.compile("[\"]?(.+?)[\"]?\\s*#\\s*[\"]?([^\"]+)[\"]?\\s*");
+		Matcher matcher = concatValue.matcher(value);
+		if (matcher.find())
+		{
+			System.out.println(matcher.group(1)+ "  " + matcher.group(2));
+			return evaluateValue(matcher.group(1)) + evaluateValue(matcher.group(2));
+		}
+		return null;
+	}
+	
+	
+	
+	private String fileReader(String file) throws IOException
+	{
+		String line = "";
+		String result = "";
+		FileReader reader = new FileReader(file);
+		BufferedReader bufReader = new BufferedReader(reader);
+		while ((line = bufReader.readLine()) != null)
+		{
+			result += line + "\n";
+		}
+		bufReader.close();
+		return result;
+	}
+	
+	
 	
 	private void loadConstants(String fileTextString)
 	{
