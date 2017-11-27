@@ -50,7 +50,7 @@ public class Parser
 				m2.matches();	
 				argumentMap.put(m2.group(1), evaluateValue(m2.group(2)));	
 			}
-			if ((argumentMap =Categories.checkCategory(m.group(1), argumentMap)) != null)
+			if ((argumentMap = Categories.checkCategory(m.group(1), argumentMap)) != null)
 			{
 				 publicationList.add(new Publication(category, key, argumentMap));
 			}

@@ -7,7 +7,7 @@ public class Main {
 
 	public static void main(String[] args) throws IOException 
 	{
-		Parser parser = new Parser("C:\\Users\\Kacper97\\Desktop\\Heszeregeszerekyk.txt");
+		Parser parser = new Parser("C:\\Users\\Kacper97\\Desktop\\test.txt");
 		List<Publication> test = parser.parse();
 		for (Publication elem : test)
 		{
@@ -19,7 +19,10 @@ public class Main {
 			}
 			System.out.println("\n\n");
 		}
+		
+		
+		PublicationHolder holder = new PublicationHolder(null, '*');
+		holder.getPublicationList1(p -> p.getCategory()=="article");
 
 	}
-
 }
