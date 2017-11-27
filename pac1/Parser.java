@@ -32,15 +32,11 @@ public class Parser
 	{
 		String fileTextString = fileReader(file);
 		
-		loadConstants(fileTextString); 
+		loadConstants(fileTextString);  
 		
-		String publicationPattern = "@(?![Pp]reamle|[Ss]tring|[Cc]oment)(\\w\\S*)\\s*[\\{\\(]([a-zA-Z]\\S*)\\s*,\\s*((\\s*\\w+\\s*=\\s*[\\S]+?,(?=\\n)\\s*)*(\\s*\\w+\\s*=\\s*[\\s\\S]+?)?)\\s*\\}";
-		String argumentPattern = "\\s*(\\w\\S*)\\s*=\\s*([\\s\\S]+?)\\s*"; 
-		
-		Pattern p = Pattern.compile(publicationPattern);
-		Matcher m = p.matcher(fileTextString);
-		
-		Pattern p2 = Pattern.compile(argumentPattern);
+		Pattern publicationPattern = Pattern.compile("@(?![Pp][Rr][Ee][Aa][Mm][Bb][Ll][Ee]|[Ss][Tt][Rr][Ii][Nn][Gg]|[Cc][Oo][Mm][Mm][Ee][Nn][Tt])(\\w\\S*)\\s*[\\{\\(]([a-zA-Z]\\S*)\\s*,\\s*((\\s*\\w+\\s*=\\s*[\\S]+?,(?=\\n)\\s*)*(\\s*\\w+\\s*=\\s*[\\s\\S]+?)?)[,]?\\s*\\n+\\s*\\}");
+		Pattern argumentPattern = Pattern.compile("\\s*(\\w\\S*)\\s*=\\s*([\\s\\S]+?)\\s*");
+		Matcher m = publicationPattern.matcher(fileTextString);
 		while(m.find()) 
 		{
 			String category = m.group(1);
@@ -50,11 +46,11 @@ public class Parser
 			for (String argument : arguments)
 			{
 				
-				Matcher m2 = p2.matcher(argument);
+				Matcher m2 = argumentPattern.matcher(argument);
 				m2.matches();	
 				argumentMap.put(m2.group(1), evaluateValue(m2.group(2)));	
 			}
-			if (Categories.checkCategory(m.group(1), argumentMap) != null)
+			if ((argumentMap =Categories.checkCategory(m.group(1), argumentMap)) != null)
 			{
 				 publicationList.add(new Publication(category, key, argumentMap));
 			}

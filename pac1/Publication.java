@@ -21,7 +21,7 @@ public class Publication
 	
 	public String getKey()
 	{
-		return key;
+		return key; 
 	}
 	
 	

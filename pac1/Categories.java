@@ -26,8 +26,8 @@ public class Categories
 		categoryList.add(new Tuple<String, Tuple<String[], String[]>>("conference", new Tuple<String[], String[]>(new String[] {"author", "title", "booktitle", "year"}, new String[] {"editor", "volume"})));
 		categoryList.add(new Tuple<String, Tuple<String[], String[]>>("conference", new Tuple<String[], String[]>(new String[] {"author", "title", "booktitle", "year"}, new String[] {"number", "series", "pages", "address", "month", "organization", "publisher", "note", "key"})));
 		categoryList.add(new Tuple<String, Tuple<String[], String[]>>("booklet", new Tuple<String[], String[]>(new String[] {"title"}, new String[] {"author", "howpublished", "address", "month", "year", "note", "key"})));
-		categoryList.add(new Tuple<String, Tuple<String[], String[]>>("incollection", new Tuple<String[], String[]>(new String[] {"author", "title", "booktitle", "publisher", "year"}, new String[] {"editor", "volume"})));
 		categoryList.add(new Tuple<String, Tuple<String[], String[]>>("incollection", new Tuple<String[], String[]>(new String[] {"author", "title", "booktitle", "publisher", "year"}, new String[] {"number", "series", "type", "chapter", "pages", "address", "edition", "month", "note", "key"})));
+		categoryList.add(new Tuple<String, Tuple<String[], String[]>>("incollection", new Tuple<String[], String[]>(new String[] {"author", "title", "booktitle", "publisher", "year"}, new String[] {"editor", "volume"})));
 		categoryList.add(new Tuple<String, Tuple<String[], String[]>>("manual", new Tuple<String[], String[]>(new String[] {"title"}, new String[] {"author", "organization", "address", "edition", "month", "year", "note", "key"})));
 		categoryList.add(new Tuple<String, Tuple<String[], String[]>>("mastersthesis", new Tuple<String[], String[]>(new String[] {"author", "title", "school", "year"}, new String[] {"type", "address", "month", "note", "key"})));
 		categoryList.add(new Tuple<String, Tuple<String[], String[]>>("phdthesis", new Tuple<String[], String[]>(new String[] {"author", "title", "school", "year"}, new String[] {"type", "address", "month", "note", "key"})));
@@ -43,7 +43,7 @@ public class Categories
 	
 	
 	public static Map<String, String> checkCategory(String category, Map<String, String> argumentMap)
-	{
+	{ 
 		category = category.toLowerCase(); 
 		for (Tuple<String, Tuple<String[], String[]>> tuple : categoryList)
 		{	
@@ -64,7 +64,7 @@ public class Categories
 					Map<String, String> result = new HashMap<String, String>();
 					for (String givenArgument : argumentMap.keySet())
 					{
-						if (Arrays.asList(tuple.right.left).contains(givenArgument))
+						if (Arrays.asList(tuple.right.left).contains(givenArgument) || Arrays.asList(tuple.right.right).contains(givenArgument))
 						{
 							result.put(givenArgument, argumentMap.get(givenArgument));
 						}
