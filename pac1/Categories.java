@@ -2,66 +2,77 @@ package pac1;
 
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map; 
 
 public class Categories 
 {
-	private static Map<String, Tuple<String[], String[]>> categoryList;
+	private static List<Tuple<String, Tuple<String[], String[]>>> categoryList;
 	static
-	{
-		categoryList = new HashMap<>();
-		categoryList.put("article", new Tuple<String[], String[]>(new String[] {"author", "title", "journal", "year"}, new String[] {"volume", "number", "pages", "month", "note", "key"}));
+	{ 
+		categoryList = new LinkedList<>();
+		categoryList.add(new Tuple<String, Tuple<String[], String[]>>("article", new Tuple<String[], String[]>(new String[] {"author", "title", "journal", "year"}, new String[] {"volume", "number", "pages", "month", "note", "key"})));
+		categoryList.add(new Tuple<String, Tuple<String[], String[]>>("book", new Tuple<String[], String[]>(new String[] {"author"}, new String[] {"volume", "series", "address", "edition", "month", "note", "key"})));
+		categoryList.add(new Tuple<String, Tuple<String[], String[]>>("book", new Tuple<String[], String[]>(new String[] {"editor", "title", "publisher", "year"}, new String[] {"volume", "series", "address", "edition", "month", "note", "key"})));
+		categoryList.add(new Tuple<String, Tuple<String[], String[]>>("inbook", new Tuple<String[], String[]>(new String[] {"author"}, new String[] {"volume"})));
+		categoryList.add(new Tuple<String, Tuple<String[], String[]>>("inbook", new Tuple<String[], String[]>(new String[] {"editor", "title", "chapter"}, new String[] {"volume"})));
+		categoryList.add(new Tuple<String, Tuple<String[], String[]>>("inbook", new Tuple<String[], String[]>(new String[] {"pages", "publisher", "year"}, new String[] {"volume"})));
+		categoryList.add(new Tuple<String, Tuple<String[], String[]>>("inbook", new Tuple<String[], String[]>(new String[] {"author"}, new String[] {"number", "series", "type", "address", "edition", "month", "note", "key"})));
+		categoryList.add(new Tuple<String, Tuple<String[], String[]>>("inbook", new Tuple<String[], String[]>(new String[] {"editor", "title", "chapter"}, new String[] {"number", "series", "type", "address", "edition", "month", "note", "key"})));
+		categoryList.add(new Tuple<String, Tuple<String[], String[]>>("inbook", new Tuple<String[], String[]>(new String[] {"pages", "publisher", "year"}, new String[] {"number", "series", "type", "address", "edition", "month", "note", "key"})));
+		categoryList.add(new Tuple<String, Tuple<String[], String[]>>("inproceedings", new Tuple<String[], String[]>(new String[] {"author", "title", "booktitle", "year"}, new String[] {"editor", "volume"})));
+		categoryList.add(new Tuple<String, Tuple<String[], String[]>>("inproceedings", new Tuple<String[], String[]>(new String[] {"author", "title", "booktitle", "year"}, new String[] {"number", "series", "pages", "address", "month", "organization", "publisher", "note", "key"})));
+		categoryList.add(new Tuple<String, Tuple<String[], String[]>>("conference", new Tuple<String[], String[]>(new String[] {"author", "title", "booktitle", "year"}, new String[] {"editor", "volume"})));
+		categoryList.add(new Tuple<String, Tuple<String[], String[]>>("conference", new Tuple<String[], String[]>(new String[] {"author", "title", "booktitle", "year"}, new String[] {"number", "series", "pages", "address", "month", "organization", "publisher", "note", "key"})));
+		categoryList.add(new Tuple<String, Tuple<String[], String[]>>("booklet", new Tuple<String[], String[]>(new String[] {"title"}, new String[] {"author", "howpublished", "address", "month", "year", "note", "key"})));
+		categoryList.add(new Tuple<String, Tuple<String[], String[]>>("incollection", new Tuple<String[], String[]>(new String[] {"author", "title", "booktitle", "publisher", "year"}, new String[] {"editor", "volume"})));
+		categoryList.add(new Tuple<String, Tuple<String[], String[]>>("incollection", new Tuple<String[], String[]>(new String[] {"author", "title", "booktitle", "publisher", "year"}, new String[] {"number", "series", "type", "chapter", "pages", "address", "edition", "month", "note", "key"})));
+		categoryList.add(new Tuple<String, Tuple<String[], String[]>>("manual", new Tuple<String[], String[]>(new String[] {"title"}, new String[] {"author", "organization", "address", "edition", "month", "year", "note", "key"})));
+		categoryList.add(new Tuple<String, Tuple<String[], String[]>>("mastersthesis", new Tuple<String[], String[]>(new String[] {"author", "title", "school", "year"}, new String[] {"type", "address", "month", "note", "key"})));
+		categoryList.add(new Tuple<String, Tuple<String[], String[]>>("phdthesis", new Tuple<String[], String[]>(new String[] {"author", "title", "school", "year"}, new String[] {"type", "address", "month", "note", "key"})));
+		categoryList.add(new Tuple<String, Tuple<String[], String[]>>("techreport", new Tuple<String[], String[]>(new String[] {"author", "title", "institution", "year"}, new String[] {"editor", "volume"})));
+		categoryList.add(new Tuple<String, Tuple<String[], String[]>>("techreport", new Tuple<String[], String[]>(new String[] {"author", "title", "institution", "year"}, new String[] {"number", "series", "address", "month", "organization", "publisher", "note", "key"})));
+		categoryList.add(new Tuple<String, Tuple<String[], String[]>>("misc", new Tuple<String[], String[]>(new String[] {}, new String[] {"author", "title", "howpublished", "month", "year", "note", "key"})));
+		categoryList.add(new Tuple<String, Tuple<String[], String[]>>("unpublished", new Tuple<String[], String[]>(new String[] {"author", "title", "note"}, new String[] {"month", "year", "key"})));
+		
+		
+		
 	}
 	
 	
 	
-	public static Boolean checkCategory(String category, Set<String> arguments)
+	public static Map<String, String> checkCategory(String category, Map<String, String> argumentMap)
 	{
-		category = category.toLowerCase();
-		Tuple<String[], String[]> categoryArguments = categoryList.get(category);
-		
-		for (String requiredArgument : categoryArguments.left)
-		{
-			if (!arguments.contains(requiredArgument)) 
+		category = category.toLowerCase(); 
+		for (Tuple<String, Tuple<String[], String[]>> tuple : categoryList)
+		{	
+			if (tuple.left.equals(category))
 			{
-				return false;
+
+				Tuple<String[], String[]> categoryArguments = tuple.right;
+				boolean buffer = true;
+				for (String requiredArgument : categoryArguments.left)
+				{
+					if (!argumentMap.containsKey(requiredArgument)) 
+					{
+						buffer = false;
+					}
+				}
+				if (buffer)
+				{
+					Map<String, String> result = new HashMap<String, String>();
+					for (String givenArgument : argumentMap.keySet())
+					{
+						if (Arrays.asList(tuple.right.left).contains(givenArgument))
+						{
+							result.put(givenArgument, argumentMap.get(givenArgument));
+						}
+					}
+					return result;
+				}
 			}
 		}
-		return true;
+		return null;
 	}
-	
-	
-	
-	public static String[] getRequiredArguments(String category)
-	{
-		return categoryList.get(category.toLowerCase()).left;
-	}
-	
-	
-	
-	public static String[] getOptionalArguments(String category)
-	{
-		return categoryList.get(category.toLowerCase()).right;
-	}
-	
-	
-	
-	public static String print()
-	{
-		String result = "";
-		for (String category : categoryList.keySet())
-		{
-			result += print(category);
-		}
-		return result;
-	}
-	
-	
-	
-	public static String print(String category)
-	{
-		return category + "\nRequired arguments: " + Arrays.toString(categoryList.get(category).left) + "\nOptional arguments: "+Arrays.toString(categoryList.get(category).right)+"\n\n";
-	}
-	
 }

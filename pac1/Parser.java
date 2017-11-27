@@ -3,10 +3,9 @@ package pac1;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.InputMismatchException;
-import java.util.LinkedList;
+import java.util.LinkedList; 
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -33,38 +32,29 @@ public class Parser
 	{
 		String fileTextString = fileReader(file);
 		
-		loadConstants(fileTextString);
+		loadConstants(fileTextString); 
 		
-		
-		String publicationPattern = "@(?![Pp]reamle|[Ss]tring|[Cc]oment)(\\w\\S*)"
-				+ "\\s*[\\{\\(]([a-zA-Z]\\S*)\\s*,\\s*"
-				+ "((\\w\\S*\\s*=\\s*.*?\\s*,\\s*)*"
-				+ "\\w\\S*\\s*=\\s*.*(?<!,)\\s*)[,]?\\s*"
-				+ "[\\}\\)]"
-				;
-		String argumentPattern = "\\s*(\\w\\S*)\\s*=\\s*(.+)\\s*";
+		String publicationPattern = "@(?![Pp]reamle|[Ss]tring|[Cc]oment)(\\w\\S*)\\s*[\\{\\(]([a-zA-Z]\\S*)\\s*,\\s*((\\s*\\w+\\s*=\\s*[\\S]+?,(?=\\n)\\s*)*(\\s*\\w+\\s*=\\s*[\\s\\S]+?)?)\\s*\\}";
+		String argumentPattern = "\\s*(\\w\\S*)\\s*=\\s*([\\s\\S]+?)\\s*"; 
 		
 		Pattern p = Pattern.compile(publicationPattern);
 		Matcher m = p.matcher(fileTextString);
 		
 		Pattern p2 = Pattern.compile(argumentPattern);
-		while(m.find())
+		while(m.find()) 
 		{
 			String category = m.group(1);
 			String key = m.group(2);
-			String[] arguments = m.group(3).split(",");
-
+			String[] arguments = m.group(3).split(",(?=[^=\"\\{\\}]*=)");
 			Map<String, String> argumentMap = new HashMap<>();
 			for (String argument : arguments)
 			{
+				
 				Matcher m2 = p2.matcher(argument);
 				m2.matches();	
-				if (Arrays.asList(Categories.getRequiredArguments(category)).contains(m2.group(1)) || Arrays.asList(Categories.getOptionalArguments(category)).contains(m2.group(1)))
-				{
-					argumentMap.put(m2.group(1), evaluateValue(m2.group(2)));
-				}		
+				argumentMap.put(m2.group(1), evaluateValue(m2.group(2)));	
 			}
-			if (Categories.checkCategory(m.group(1), argumentMap.keySet()))
+			if (Categories.checkCategory(m.group(1), argumentMap) != null)
 			{
 				 publicationList.add(new Publication(category, key, argumentMap));
 			}
@@ -82,7 +72,7 @@ public class Parser
 	{
 		if (constantsMap.containsKey(value.toLowerCase()))
 		{
-			return constantsMap.get(value.toLowerCase());
+			return constantsMap.get(value.toLowerCase()); 
 		}
 		
 		String result;
@@ -104,8 +94,9 @@ public class Parser
 	
 	private String evaluateSingleValue(String value)
 	{
+
 		Pattern regularValue = Pattern.compile("^(?!\"|\\{)(.*?)(?<!\"\\})$");  
-		Pattern quotedValue = Pattern.compile("\"(.*?)\"");
+		Pattern quotedValue = Pattern.compile("\"([\\s\\S]*?)\"");
 		Pattern bracedValue = Pattern.compile("\\{([^\\{\\}]*?)\\}");
 		 
 		String currentValue = value;
@@ -116,6 +107,7 @@ public class Parser
 			currentValue = matcher.replaceFirst(matcher.group(1));
 			matcher = bracedValue.matcher(currentValue);
 		}
+		
 		
 		matcher = regularValue.matcher(currentValue);
 		if (matcher.matches())

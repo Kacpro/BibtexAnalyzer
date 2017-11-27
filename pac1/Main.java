@@ -11,12 +11,13 @@ public class Main {
 		List<Publication> test = parser.parse();
 		for (Publication elem : test)
 		{
-			System.out.println(elem.getCategory());
+			System.out.println(elem.getCategory()); 
 			System.out.println(elem.getKey());
 			for (Tuple<String, String> arg : elem.arguments)
 			{
 				System.out.println(arg);
 			}
+			System.out.println("\n\n");
 		}
 
 	}

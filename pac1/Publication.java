@@ -39,12 +39,12 @@ public class Publication
 	}
 	
 	
-	
+	 
 	public String getArgumentValue(String argument)
 	{
 		for (Tuple<String, String> tuple : arguments)
 		{
-			if(tuple.left == argument.toLowerCase())
+			if(tuple.left.equals(argument.toLowerCase()))
 			{
 				return tuple.right;
 			}
