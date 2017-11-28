@@ -27,7 +27,7 @@ public class PublicationHolder
 	
 	
 	
-	public List<Publication> getPublicationList1(Function<Publication, Boolean> method)
+	public List<Publication> getPublicationList(Function<Publication, Boolean> method)
 	{
 		List<Publication> result = new LinkedList<Publication>();
 		for (Publication publication : publicationList)

@@ -1,5 +1,6 @@
 package pac1;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -63,7 +64,32 @@ public class Publication
 		{
 			this.arguments.add(new Tuple<String, String>(argumentName, arguments.get(argumentName)));
 		}
+		getNameDetails("author");
 	}
 	
+	
+	public List<Person> getNameDetails(String category)
+	{
+		String[] names = {};
+		for (Tuple<String, String> tuple : arguments)
+		{
+			if (tuple.left.equals(category))
+			{
+				names = tuple.right.split("\\s[aA][nN][dD]\\s");
+				break;
+			}
+		}
+		System.out.println(Arrays.toString(names));
+		
+		List<Person> nameDetails = new LinkedList<Person>();
+		
+		for (String name : names)
+		{
+			nameDetails.add(new Person(name));
+		}
+		
+		
+		return nameDetails;
+	}
 	
 }

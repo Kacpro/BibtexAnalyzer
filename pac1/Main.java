@@ -21,8 +21,6 @@ public class Main {
 		}
 		
 		
-		PublicationHolder holder = new PublicationHolder(null, '*');
-		holder.getPublicationList1(p -> p.getCategory()=="article");
-
+		
 	}
 }
