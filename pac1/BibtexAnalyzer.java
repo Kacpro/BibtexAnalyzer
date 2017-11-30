@@ -37,21 +37,30 @@ public class BibtexAnalyzer
 	private void printCmdArguments()
 	{
 //		System.out.println(publicationHolder);
+		boolean flag = true;
 		for (String categorie : categories) 
 		{
 			System.out.println(getByCategory(categorie));
+			flag = false;
 		}
 		for (Tuple<String, String> tuple : arguments)
 		{
 			System.out.println(getByArgument(tuple.left, tuple.right));
+			flag = false;
 		}
 		for (Tuple<String, String> tuple : lastNames) 
 		{ 
 			System.out.println(getByLastName(tuple.left, tuple.right));
+			flag = false;
 		}
 		for (Tuple<String, String> tuple : firstNames) 
 		{
 			System.out.println(getByFirstName(tuple.left, tuple.right));
+			flag = false;
+		}
+		if (flag)
+		{
+			System.out.println(publicationHolder);
 		}
 	}
 	

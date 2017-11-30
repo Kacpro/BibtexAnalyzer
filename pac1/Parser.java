@@ -56,7 +56,7 @@ public class Parser
 			}
 			else
 			{
-				throw new InputMismatchException();
+				throw new InputMismatchException("Wrong arguments in " + m.group(2));
 			}
 		}
 		return publicationList;
@@ -96,7 +96,7 @@ public class Parser
 		Pattern bracedValue = Pattern.compile("\\{([^\\{\\}]*?)\\}");
 		 
 		String currentValue = value;
-		 
+		  
 		Matcher matcher = bracedValue.matcher(value);
 		while(matcher.find())
 		{
