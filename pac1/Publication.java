@@ -4,7 +4,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-public class Publication 
+public class Publication  
 {
 	private String category = null;
 	public List<Tuple<String, String>> arguments= new LinkedList<>();  //public do testów
@@ -44,12 +44,12 @@ public class Publication
 	{
 		for (Tuple<String, String> tuple : arguments)
 		{
-			if(tuple.left.equals(argument.toLowerCase()))
+			if(tuple.left.equalsIgnoreCase(argument))
 			{
 				return tuple.right;
-			}
+			} 
 		}
-		return null;
+		return "";
 	}
 	
 	
@@ -86,7 +86,7 @@ public class Publication
 		{
 			nameDetails.add(new Person(name));
 		}
-		
+		 
 		
 		return nameDetails;
 	}

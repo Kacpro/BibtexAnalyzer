@@ -1,7 +1,7 @@
 package pac1;
 
 import java.util.LinkedList;
-import java.util.List;
+import java.util.List; 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -34,7 +34,7 @@ public class CommandParser
 		
 		Pattern categoryPattern = Pattern.compile("\\s*(\\w\\w+)\\s*");
 		Pattern signPattern = Pattern.compile("\\s*(\\S)\\s*");
-		Pattern argumentPattern = Pattern.compile("\\s*(\\w\\w+)\\s*=\\s*\"(\\S.*?)\"\\s*");
+		Pattern argumentPattern = Pattern.compile("\\s*(\\w\\w+)\\s*=\\s*\'(\\S.*?)\'\\s*");
 		
 
 		Pattern optionPattern = Pattern.compile("(-\\w)\\s+(.+)");
@@ -61,7 +61,7 @@ public class CommandParser
 						break;
 					}
 				case "-a":
-					{
+					{ 
 						mainMatcher = argumentPattern.matcher(matcher.group(2));
 						while (mainMatcher.find())
 						{
@@ -90,13 +90,15 @@ public class CommandParser
 				case "-l":
 				{
 						mainMatcher = argumentPattern.matcher(matcher.group(2));
+			//			System.out.println(matcher.group(2));
 						while (mainMatcher.find())
-						{
+						{	
+			//				System.out.println(mainMatcher.group(2));
 							requestedLastNames.add(new Tuple<String, String>(mainMatcher.group(1), mainMatcher.group(2)));
 						}
 						break;
 					}	
-				}
+				}  
 			}
 		}
 		return new Tuple<Tuple<Tuple<String, Character>, Tuple<List<String>, List<Tuple<String, String>>>>, Tuple<List<Tuple<String, String>>, List<Tuple<String, String>>>>(new Tuple<Tuple<String, Character>, Tuple<List<String>, List<Tuple<String, String>>>>(new Tuple<String, Character>(filePath, borderChar), new Tuple<List<String>, List<Tuple<String, String>>>(requestedCategories, requestedArguments)), new Tuple<List<Tuple<String, String>>, List<Tuple<String, String>>>(requestedFirstNames, requestedLastNames));

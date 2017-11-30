@@ -2,6 +2,7 @@ package pac1;
 
 import java.io.IOException;
 import java.util.InputMismatchException;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Function;
 
@@ -9,9 +10,9 @@ public class BibtexAnalyzer
 {
 	private PublicationHolder publicationHolder;
 	private List<String> categories;
-	private List<Tuple<String, String>> arguments;
-	private List<Tuple<String, String>> firstNames;
-	private List<Tuple<String, String>> lastNames;
+	private List<Tuple<String, String>> arguments = new LinkedList<>();
+	private List<Tuple<String, String>> firstNames = new LinkedList<>();
+	private List<Tuple<String, String>> lastNames = new LinkedList<>();
 	private String file;
 	private char borderChar = '*';
 	
@@ -27,11 +28,32 @@ public class BibtexAnalyzer
 		firstNames = xD.right.left;
 		lastNames = xD.right.right;
 		
+		
 		Parser parser = new Parser(this.file);
 		publicationHolder = new PublicationHolder(parser.parse(), borderChar);
+		printCmdArguments();
 	}
 	
-	
+	private void printCmdArguments()
+	{
+//		System.out.println(publicationHolder);
+		for (String categorie : categories) 
+		{
+			System.out.println(getByCategory(categorie));
+		}
+		for (Tuple<String, String> tuple : arguments)
+		{
+			System.out.println(getByArgument(tuple.left, tuple.right));
+		}
+		for (Tuple<String, String> tuple : lastNames) 
+		{ 
+			System.out.println(getByLastName(tuple.left, tuple.right));
+		}
+		for (Tuple<String, String> tuple : firstNames) 
+		{
+			System.out.println(getByFirstName(tuple.left, tuple.right));
+		}
+	}
 	
 	public Publication getPublication(String key)
 	{
@@ -55,19 +77,24 @@ public class BibtexAnalyzer
 	
 	PublicationHolder getByCategory(String category)
 	{
-		return publicationHolder.get(p -> p.getCategory().equals(category));
+		return publicationHolder.get(p -> p.getCategory().equalsIgnoreCase(category));
 	}
 	
 	
 	PublicationHolder getByArgument(String name, String value)
 	{
-		return publicationHolder.get(p -> p.getArgumentValue(name).equals(value));
+		return publicationHolder.get(p ->  p.getArgumentValue(name).equalsIgnoreCase(value));
 	}
 	
 	
 	PublicationHolder getByLastName(String name, String value)
 	{
-		return publicationHolder.get(p -> { List<Person> buf = p.getNameDetails(name); for(Person per : buf) { if (per.getLastName().equals(value)) return true;}return false;});
+		return publicationHolder.get(p -> { List<Person> buf = p.getNameDetails(name); for(Person per : buf) { if (per.getLastName().equalsIgnoreCase(value)) return true;}return false;});
+	} 
+	
+	PublicationHolder getByFirstName(String name, String value)
+	{
+		return publicationHolder.get(p -> { List<Person> buf = p.getNameDetails(name); for(Person per : buf) {if (per.getFirstName().equalsIgnoreCase(value)) return true;}return false;});
 	}
 	
 	public String toString()

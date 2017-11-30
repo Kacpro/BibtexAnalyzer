@@ -9,7 +9,7 @@ public class PublicationHolder
 	private List<Publication> publicationList = new LinkedList<>();
 	
 	private char borderChar;
-	
+	 
 	
 	
 	public PublicationHolder(List<Publication> publicationList, char borderChar)
@@ -29,10 +29,10 @@ public class PublicationHolder
 	
 	public PublicationHolder get(Function<Publication, Boolean> method)
 	{
-		List<Publication> result = new LinkedList<Publication>();
+		List<Publication> result = new LinkedList<Publication>();  
 		for (Publication publication : publicationList)
 		{
-			if (method.apply(publication))
+			if (method.apply(publication)) 
 			{
 				result.add(publication);
 			}

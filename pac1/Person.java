@@ -8,16 +8,16 @@ public class Person
 	private String firstName;
 	private String lastName; 
 	private String von;
-	private String jr;
+	private String jr; 
 	
 	public String getFirstName()
 	{
 		return firstName;
 	}
 	
-	public String getLastName()
+	public String getLastName() 
 	{
-		return lastName;
+		return lastName; 
 	}
 	
 	public String getVon()
@@ -56,7 +56,7 @@ public class Person
 		
 		if (matcher.matches())
 		{
-			firstName = matcher.group(1);
+			firstName = matcher.group(1).replaceAll("\\s*$","");
 			lastName = matcher.group(7);
 			von = matcher.group(4);
 		}

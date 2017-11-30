@@ -6,11 +6,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map; 
 
-public class Categories 
+public class Categories  
 {
 	private static List<Tuple<String, Tuple<String[], String[]>>> categoryList;
 	static
-	{ 
+	{  
 		categoryList = new LinkedList<>();
 		categoryList.add(new Tuple<String, Tuple<String[], String[]>>("article", new Tuple<String[], String[]>(new String[] {"author", "title", "journal", "year"}, new String[] {"volume", "number", "pages", "month", "note", "key"})));
 		categoryList.add(new Tuple<String, Tuple<String[], String[]>>("book", new Tuple<String[], String[]>(new String[] {"author"}, new String[] {"volume", "series", "address", "edition", "month", "note", "key"})));

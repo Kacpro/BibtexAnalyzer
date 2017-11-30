@@ -117,7 +117,7 @@ public class Parser
 			return matcher.group(1);
 		}
 		return null;
-	}
+	} 
 	
 	
 	
@@ -136,7 +136,7 @@ public class Parser
 	
 	private String fileReader(String file) throws IOException
 	{
-		String line = "";
+		String line = ""; 
 		String result = "";
 		FileReader reader = new FileReader(file);
 		BufferedReader bufReader = new BufferedReader(reader);
