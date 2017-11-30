@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.function.Function;;
 
 public class PublicationHolder
-{
+{ 
 	private List<Publication> publicationList = new LinkedList<>();
 	
 	private char borderChar;

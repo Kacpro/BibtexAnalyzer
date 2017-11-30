@@ -145,7 +145,7 @@ public class Parser
 			result += line + "\n";
 		}
 		bufReader.close();
-		return result;
+		return result; 
 	}
 	
 	

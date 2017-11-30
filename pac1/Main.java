@@ -4,12 +4,12 @@ import java.io.IOException;
  
 public class Main {
 
-	public static void main(String[] args) throws IOException 
+	public static void main(String[] argv) throws IOException 
 	{
-		BibtexAnalyzer anal = new BibtexAnalyzer("C:\\Users\\Kacper97\\Desktop\\test.txt");
+		BibtexAnalyzer anal = new BibtexAnalyzer(argv);
 		System.out.println(anal);
 		
-		
+		 
 		
 	}
 }

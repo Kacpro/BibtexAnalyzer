@@ -8,14 +8,26 @@ import java.util.function.Function;
 public class BibtexAnalyzer 
 {
 	private PublicationHolder publicationHolder;
-	private String[] cateogries;
-	private String[] authors;
+	private List<String> categories;
+	private List<Tuple<String, String>> arguments;
+	private List<Tuple<String, String>> firstNames;
+	private List<Tuple<String, String>> lastNames;
+	private String file;
 	private char borderChar = '*';
 	
 	
-	public BibtexAnalyzer(String file) throws InputMismatchException, IOException
+	public BibtexAnalyzer(String[] commandLine) throws InputMismatchException, IOException
 	{
-		Parser parser = new Parser(file);
+		CommandParser cmdParser = new CommandParser();
+		Tuple<Tuple<Tuple<String, Character>, Tuple<List<String>, List<Tuple<String, String>>>>, Tuple<List<Tuple<String, String>>, List<Tuple<String, String>>>> xD = cmdParser.parseCommand(commandLine);
+		file = xD.left.left.left;
+		borderChar = xD.left.left.right;
+		categories = xD.left.right.left;
+		arguments = xD.left.right.right;
+		firstNames = xD.right.left;
+		lastNames = xD.right.right;
+		
+		Parser parser = new Parser(this.file);
 		publicationHolder = new PublicationHolder(parser.parse(), borderChar);
 	}
 	

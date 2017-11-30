@@ -6,7 +6,7 @@ import java.util.regex.Pattern;
 public class Person
 {
 	private String firstName;
-	private String lastName;
+	private String lastName; 
 	private String von;
 	private String jr;
 	
