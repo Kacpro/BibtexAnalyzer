@@ -42,7 +42,7 @@ public class Person
 	private void parseName(String name)
 	{
 	
-		Pattern buf = Pattern.compile("[a-zA-Z0-9\\s]*");
+		Pattern buf = Pattern.compile("[a-zA-Z0-9\\s.]*");
 		Matcher m = buf.matcher(name);
 		String buffer = "";
 		while (m.find())
@@ -60,7 +60,7 @@ public class Person
 			lastName = matcher.group(7);
 			von = matcher.group(4);
 		}
-		System.out.println(firstName+ " " + lastName + " " + von);
+	//	System.out.println(firstName+ " " + lastName + " " + von);
 		
 	}
 	

@@ -27,7 +27,7 @@ public class PublicationHolder
 	
 	
 	
-	public List<Publication> getPublicationList(Function<Publication, Boolean> method)
+	public PublicationHolder get(Function<Publication, Boolean> method)
 	{
 		List<Publication> result = new LinkedList<Publication>();
 		for (Publication publication : publicationList)
@@ -37,14 +37,19 @@ public class PublicationHolder
 				result.add(publication);
 			}
 		}
-		return result;
+		return new PublicationHolder(result, borderChar);
 	}
 	
 	
 	
 	public String toString()
 	{
-		return borderChar+"";
+		String result = "";
+		for (Publication publication : publicationList)
+		{
+			result += publication.print(borderChar) + "\n\n\n";
+		}
+		return result;
 	}
 	
 }

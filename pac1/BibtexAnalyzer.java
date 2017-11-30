@@ -10,7 +10,7 @@ public class BibtexAnalyzer
 	private PublicationHolder publicationHolder;
 	private String[] cateogries;
 	private String[] authors;
-	private char borderChar;
+	private char borderChar = '*';
 	
 	
 	public BibtexAnalyzer(String file) throws InputMismatchException, IOException
@@ -35,21 +35,32 @@ public class BibtexAnalyzer
 	
 	
 	
-	List<Publication> getByLamda(Function<Publication, Boolean> method)
+	PublicationHolder getByLamda(Function<Publication, Boolean> method)
 	{
-		return publicationHolder.getPublicationList(method);
+		return publicationHolder.get(method);
 	}
 	
 	
-	List<Publication> getByCategory(String category)
+	PublicationHolder getByCategory(String category)
 	{
-		return publicationHolder.getPublicationList(p -> p.getCategory() == category);
+		return publicationHolder.get(p -> p.getCategory().equals(category));
 	}
 	
 	
-	List<Publication> getByArgument(String name, String value)
+	PublicationHolder getByArgument(String name, String value)
 	{
-		return publicationHolder.getPublicationList(p -> p.getArgumentValue(name) == value);
+		return publicationHolder.get(p -> p.getArgumentValue(name).equals(value));
+	}
+	
+	
+	PublicationHolder getByLastName(String name, String value)
+	{
+		return publicationHolder.get(p -> { List<Person> buf = p.getNameDetails(name); for(Person per : buf) { if (per.getLastName().equals(value)) return true;}return false;});
+	}
+	
+	public String toString()
+	{
+		return publicationHolder.toString();
 	}
 	
 }

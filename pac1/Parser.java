@@ -48,7 +48,7 @@ public class Parser
 				
 				Matcher m2 = argumentPattern.matcher(argument);
 				m2.matches();	
-				argumentMap.put(m2.group(1), evaluateValue(m2.group(2)));	
+				argumentMap.put(m2.group(1), evaluateValue(m2.group(2).replaceAll("\n", " ")));	
 			}
 			if ((argumentMap = Categories.checkCategory(m.group(1), argumentMap)) != null)
 			{
