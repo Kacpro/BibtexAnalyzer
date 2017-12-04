@@ -48,7 +48,14 @@ public class Parser
 				
 				Matcher m2 = argumentPattern.matcher(argument);
 				m2.matches();	
-				argumentMap.put(m2.group(1), evaluateValue(m2.group(2).replaceAll("\n", " ")));	
+				try
+				{
+					argumentMap.put(m2.group(1), evaluateValue(m2.group(2).replaceAll("\n", " ")));	
+				}
+				catch(InputMismatchException e)
+				{
+					throw new InputMismatchException("String parsing error in: " + m.group(2) + ", " + m2.group(1));
+				}
 			}
 			if ((argumentMap = Categories.checkCategory(m.group(1), argumentMap)) != null)
 			{
@@ -71,6 +78,7 @@ public class Parser
 			return constantsMap.get(value.toLowerCase()); 
 		}
 		
+		
 		String result;
 		
 		if ((result = evaluateConcatenatedValue(value)) != null)
@@ -88,10 +96,10 @@ public class Parser
 	
 	
 	
-	private String evaluateSingleValue(String value)
+	private String evaluateSingleValue(String value) throws InputMismatchException
 	{
 
-		Pattern regularValue = Pattern.compile("^(?!\"|\\{)(.*?)(?<!\"\\})$");  
+		Pattern regularValue = Pattern.compile("^(?!\"|\\{)([0-9]*?)(?<!\"\\})$");  
 		Pattern quotedValue = Pattern.compile("\"([\\s\\S]*?)\"");
 		Pattern bracedValue = Pattern.compile("\\{([^\\{\\}]*?)\\}");
 		 
@@ -116,17 +124,26 @@ public class Parser
 		{
 			return matcher.group(1);
 		}
-		return null;
+		throw new InputMismatchException();
 	} 
 	
 	
 	
-	private String evaluateConcatenatedValue(String value)
+	private String evaluateConcatenatedValue(String value) throws InputMismatchException
 	{
-		Pattern concatValue = Pattern.compile("[\"]?(.+?)[\"]?\\s*#\\s*(([\"]?([^\"]+)[\"]?\\s*[#]?)+)");
+		Pattern concatValue = Pattern.compile("([\"]?.+?[\"]?)\\s*#\\s*(([\"]?([^\"]+)[\"]?\\s*[#]?)+)");
+		Pattern braceStartValue = Pattern.compile("\\{.+");
 		Matcher matcher = concatValue.matcher(value);
 		if (matcher.find())
 		{
+			String group1 = matcher.group(1);
+			String group2 = matcher.group(2);
+			Matcher m1 = braceStartValue.matcher(group1);
+			Matcher m2 = braceStartValue.matcher(group2);
+			if (m1.matches() || m2.matches())
+			{
+				throw new InputMismatchException();
+			}
 			return evaluateValue(matcher.group(1)) + evaluateValue(matcher.group(2));
 		}
 		return null;

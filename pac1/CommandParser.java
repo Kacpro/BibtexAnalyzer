@@ -25,16 +25,16 @@ public class CommandParser
 		filePath = argv[0];	
 		
 		List<String> metaSigns = new LinkedList<>();
-		metaSigns.add("-s");
-		metaSigns.add("-a");
-		metaSigns.add("-c");
+		metaSigns.add("~s");
+		metaSigns.add("~a");
+		metaSigns.add("~c");
 		String command = "";
 		for (int i=1;i<argv.length;i++)
 		{ 
 			command += " " + argv[i];
 		}
 //		System.out.println(command);
-		String[] splitCommand = command.split(" (?=-s|-a|-c|-l|-f)");
+		String[] splitCommand = command.split(" (?=~s|~a|~c|~l|~f)");
 //		System.out.println(Arrays.toString(splitCommand));
 		
 		Pattern categoryPattern = Pattern.compile("\\s*\'(\\w\\w+)\'\\s*");
@@ -42,7 +42,7 @@ public class CommandParser
 		Pattern argumentPattern = Pattern.compile("\\s*(\\w\\w+)\\s*=\\s*\'(\\S.*?)\'\\s*");
 		
 
-		Pattern optionPattern = Pattern.compile("(-\\w)\\s+(.+)");
+		Pattern optionPattern = Pattern.compile("(~\\w)\\s+(.+)");
 		
 		for (String commandPart : splitCommand) 
 		{
@@ -56,16 +56,16 @@ public class CommandParser
 				
 				switch (matcher.group(1))
 				{
-				case "-s": 
+				case "~s": 
 					{
 						mainMatcher = signPattern.matcher(matcher.group(2));
 						if (mainMatcher.find())
 						{
 							borderChar = mainMatcher.group(1).toCharArray()[0];
-						}
+						} 
 						break;
 					}
-				case "-a":
+				case "~a":
 					{ 
 						mainMatcher = argumentPattern.matcher(matcher.group(2));
 						while (mainMatcher.find())
@@ -74,7 +74,7 @@ public class CommandParser
 						}
 						break;
 					}
-				case "-c":
+				case "~c":
 					{
 						mainMatcher = categoryPattern.matcher(matcher.group(2));
 						while (mainMatcher.find())
@@ -83,7 +83,7 @@ public class CommandParser
 						}
 						break;
 					}
-				case "-f":
+				case "~f":
 					{
 						mainMatcher = argumentPattern.matcher(matcher.group(2));
 						while (mainMatcher.find())
@@ -92,7 +92,7 @@ public class CommandParser
 						}
 						break;
 					}
-				case "-l":
+				case "~l":
 				{
 						mainMatcher = argumentPattern.matcher(matcher.group(2));
 			//			System.out.println(matcher.group(2));

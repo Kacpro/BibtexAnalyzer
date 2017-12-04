@@ -22,13 +22,13 @@ public class BibtexAnalyzer
 		CommandParser cmdParser = new CommandParser();
 		try
 		{
-			Tuple<Tuple<Tuple<String, Character>, Tuple<List<String>, List<Tuple<String, String>>>>, Tuple<List<Tuple<String, String>>, List<Tuple<String, String>>>> xD = cmdParser.parseCommand(commandLine);
-			file = xD.left.left.left;
-			borderChar = xD.left.left.right;
-			categories = xD.left.right.left;
-			arguments = xD.left.right.right;
-			firstNames = xD.right.left;
-			lastNames = xD.right.right;
+			Tuple<Tuple<Tuple<String, Character>, Tuple<List<String>, List<Tuple<String, String>>>>, Tuple<List<Tuple<String, String>>, List<Tuple<String, String>>>> cmd = cmdParser.parseCommand(commandLine);
+			file = cmd.left.left.left;
+			borderChar = cmd.left.left.right;
+			categories = cmd.left.right.left;
+			arguments = cmd.left.right.right;
+			firstNames = cmd.right.left;
+			lastNames = cmd.right.right;
 		}
 		catch(InputMismatchException e)
 		{
