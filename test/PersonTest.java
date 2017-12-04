@@ -18,7 +18,7 @@ public class PersonTest
 		Person person = new Person("");
 		Class<?> _person = Class.forName("pac1.Person");
 		Method m = _person.getDeclaredMethod("parseName", String.class);
-		m.setAccessible(true);
+		m.setAccessible(true); 
 		
 		m.invoke(person, "AA BB");
 		assertEquals("Name = AA", "AA", person.getFirstName());

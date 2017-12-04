@@ -17,20 +17,41 @@ public class BibtexAnalyzer
 	private char borderChar = '*';
 	
 	
-	public BibtexAnalyzer(String[] commandLine) throws InputMismatchException, IOException
+	public BibtexAnalyzer(String[] commandLine)
 	{
 		CommandParser cmdParser = new CommandParser();
-		Tuple<Tuple<Tuple<String, Character>, Tuple<List<String>, List<Tuple<String, String>>>>, Tuple<List<Tuple<String, String>>, List<Tuple<String, String>>>> xD = cmdParser.parseCommand(commandLine);
-		file = xD.left.left.left;
-		borderChar = xD.left.left.right;
-		categories = xD.left.right.left;
-		arguments = xD.left.right.right;
-		firstNames = xD.right.left;
-		lastNames = xD.right.right;
+		try
+		{
+			Tuple<Tuple<Tuple<String, Character>, Tuple<List<String>, List<Tuple<String, String>>>>, Tuple<List<Tuple<String, String>>, List<Tuple<String, String>>>> xD = cmdParser.parseCommand(commandLine);
+			file = xD.left.left.left;
+			borderChar = xD.left.left.right;
+			categories = xD.left.right.left;
+			arguments = xD.left.right.right;
+			firstNames = xD.right.left;
+			lastNames = xD.right.right;
+		}
+		catch(InputMismatchException e)
+		{
+			System.out.println(e.getMessage());
+			System.exit(-1);
+		}
 		
 		
 		Parser parser = new Parser(this.file);
-		publicationHolder = new PublicationHolder(parser.parse(), borderChar);
+		try 
+		{
+			publicationHolder = new PublicationHolder(parser.parse(), borderChar);
+		} 
+		catch (InputMismatchException e) 
+		{
+			System.out.println(e.getMessage());
+			System.exit(-1);
+		} 
+		catch (IOException e) 
+		{
+			System.out.println("File opening error");
+			System.exit(-1);
+		}
 		printCmdArguments();
 	}
 	
@@ -58,7 +79,7 @@ public class BibtexAnalyzer
 			System.out.println(getByFirstName(tuple.left, tuple.right));
 			flag = false;
 		}
-		if (flag)
+		if (flag && publicationHolder!=null)
 		{
 			System.out.println(publicationHolder);
 		}

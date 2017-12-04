@@ -1,5 +1,6 @@
 package pac1;
 
+import java.util.InputMismatchException;
 import java.util.LinkedList;
 import java.util.List; 
 import java.util.regex.Matcher;
@@ -15,8 +16,12 @@ public class CommandParser
 	List<Tuple<String, String>> requestedLastNames = new LinkedList<>();
 	char borderChar;
 	
-	public Tuple<Tuple<Tuple<String, Character>, Tuple<List<String>, List<Tuple<String, String>>>>, Tuple<List<Tuple<String, String>>, List<Tuple<String, String>>>> parseCommand(String[] argv)
+	public Tuple<Tuple<Tuple<String, Character>, Tuple<List<String>, List<Tuple<String, String>>>>, Tuple<List<Tuple<String, String>>, List<Tuple<String, String>>>> parseCommand(String[] argv) throws InputMismatchException
 	{
+		if (argv == null)
+		{
+			throw new InputMismatchException("No file given");
+		}
 		filePath = argv[0];	
 		
 		List<String> metaSigns = new LinkedList<>();
