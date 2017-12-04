@@ -16,3 +16,4 @@ public class Tuple<T1, T2>
 		return "("+left+", "+right+")"; 
 	}
 }
+ 

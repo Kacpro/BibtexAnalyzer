@@ -45,31 +45,34 @@ public class Categories
 	public static Map<String, String> checkCategory(String category, Map<String, String> argumentMap)
 	{ 
 		category = category.toLowerCase(); 
-		for (Tuple<String, Tuple<String[], String[]>> tuple : categoryList)
-		{	
-			if (tuple.left.equals(category))
-			{
-
-				Tuple<String[], String[]> categoryArguments = tuple.right;
-				boolean buffer = true;
-				for (String requiredArgument : categoryArguments.left)
+		if (argumentMap != null)
+		{
+			for (Tuple<String, Tuple<String[], String[]>> tuple : categoryList)
+			{	
+				if (tuple.left.equals(category) )
 				{
-					if (!argumentMap.containsKey(requiredArgument)) 
+	
+					Tuple<String[], String[]> categoryArguments = tuple.right;
+					boolean buffer = true;
+					for (String requiredArgument : categoryArguments.left)
 					{
-						buffer = false;
-					}
-				}
-				if (buffer)
-				{
-					Map<String, String> result = new HashMap<String, String>();
-					for (String givenArgument : argumentMap.keySet())
-					{
-						if (Arrays.asList(tuple.right.left).contains(givenArgument) || Arrays.asList(tuple.right.right).contains(givenArgument))
+						if (!argumentMap.containsKey(requiredArgument)) 
 						{
-							result.put(givenArgument, argumentMap.get(givenArgument));
+							buffer = false;
 						}
 					}
-					return result;
+					if (buffer)
+					{
+						Map<String, String> result = new HashMap<String, String>();
+						for (String givenArgument : argumentMap.keySet())
+						{
+							if (Arrays.asList(tuple.right.left).contains(givenArgument) || Arrays.asList(tuple.right.right).contains(givenArgument))
+							{
+								result.put(givenArgument, argumentMap.get(givenArgument));
+							}
+						}
+						return result;
+					}
 				}
 			}
 		}

@@ -101,7 +101,7 @@ public class Parser
 		while(matcher.find())
 		{
 			currentValue = matcher.replaceFirst(matcher.group(1));
-			matcher = bracedValue.matcher(currentValue);
+			matcher = bracedValue.matcher(currentValue); 
 		}
 		
 		
@@ -123,7 +123,7 @@ public class Parser
 	
 	private String evaluateConcatenatedValue(String value)
 	{
-		Pattern concatValue = Pattern.compile("[\"]?(.+?)[\"]?\\s*#\\s*[\"]?([^\"]+)[\"]?\\s*");
+		Pattern concatValue = Pattern.compile("[\"]?(.+?)[\"]?\\s*#\\s*(([\"]?([^\"]+)[\"]?\\s*[#]?)+)");
 		Matcher matcher = concatValue.matcher(value);
 		if (matcher.find())
 		{

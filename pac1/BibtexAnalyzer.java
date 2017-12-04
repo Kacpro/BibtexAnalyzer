@@ -51,7 +51,7 @@ public class BibtexAnalyzer
 		for (Tuple<String, String> tuple : lastNames) 
 		{ 
 			System.out.println(getByLastName(tuple.left, tuple.right));
-			flag = false;
+			flag = false; 
 		}
 		for (Tuple<String, String> tuple : firstNames) 
 		{

@@ -4,7 +4,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Person
-{
+{ 
 	private String firstName;
 	private String lastName; 
 	private String von;
@@ -60,7 +60,6 @@ public class Person
 			lastName = matcher.group(7);
 			von = matcher.group(4);
 		}
-	//	System.out.println(firstName+ " " + lastName + " " + von);
 		
 	}
 	

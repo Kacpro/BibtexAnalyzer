@@ -25,14 +25,14 @@ public class CommandParser
 		metaSigns.add("-c");
 		String command = "";
 		for (int i=1;i<argv.length;i++)
-		{
+		{ 
 			command += " " + argv[i];
 		}
 //		System.out.println(command);
 		String[] splitCommand = command.split(" (?=-s|-a|-c|-l|-f)");
 //		System.out.println(Arrays.toString(splitCommand));
 		
-		Pattern categoryPattern = Pattern.compile("\\s*(\\w\\w+)\\s*");
+		Pattern categoryPattern = Pattern.compile("\\s*\'(\\w\\w+)\'\\s*");
 		Pattern signPattern = Pattern.compile("\\s*(\\S)\\s*");
 		Pattern argumentPattern = Pattern.compile("\\s*(\\w\\w+)\\s*=\\s*\'(\\S.*?)\'\\s*");
 		
